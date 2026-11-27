@@ -31,10 +31,11 @@
     }
 
     .menu-btn {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       color: #e5e7eb;
       background: none;
       border: none;
+      cursor: pointer;
     }
 
     .brand {
@@ -43,6 +44,102 @@
       letter-spacing: 2px;
       color: #ffffff;
       text-shadow: 0 0 12px rgba(255, 71, 87, 0.55);
+    }
+
+    /* সাইড মেনু ওভারলে ও ড্রয়ার */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      z-index: 40;
+    }
+
+    .drawer-backdrop.open {
+      display: block;
+    }
+
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 285px;
+      max-width: 85vw;
+      height: 100vh;
+      background: #101522;
+      border-right: 1px solid #1f2942;
+      padding: 18px 16px;
+      overflow-y: auto;
+      transition: left 0.25s ease;
+      z-index: 50;
+    }
+
+    .side-drawer.open {
+      left: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1d263d;
+    }
+
+    .close-btn {
+      background: #1a2236;
+      color: #e5e7eb;
+      border: 1px solid #2b3754;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .open-search-btn {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #384975;
+      background: linear-gradient(90deg, #17223b, #231d3d);
+      color: #e5e7eb;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-item {
+      width: 100%;
+      background: #171d2e;
+      border: 1px solid #232d47;
+      color: #e5e7eb;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      border-color: #4f67a8;
+      background: #1d263d;
     }
 
     .search-wrap {
@@ -58,6 +155,25 @@
       color: #fff;
       font-size: 0.95rem;
       outline: none;
+    }
+
+    .active-filter-bar {
+      padding: 8px 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .reset-btn {
+      background: #1b2338;
+      color: #f3f4f6;
+      border: 1px solid #2d3a5c;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
     }
 
     .section {
@@ -163,8 +279,42 @@
   </style>
 </head>
 <body>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <div class="brand">CINEMA HUTY</div>
+      <button class="close-btn" id="closeDrawerBtn" aria-label="Close Menu">✕</button>
+    </div>
+
+    <button class="open-search-btn" id="drawerSearchBtn">? OPEN SEARCH</button>
+
+    <nav class="nav-list">
+      <button class="nav-item active" data-category="ALL">
+        <span>HOME</span>
+      </button>
+      <button class="nav-item" data-category="MOVIE">
+        <span>MOVIE</span>
+        <span>&gt;</span>
+      </button>
+      <button class="nav-item" data-category="TV SERIES">
+        <span>TV SERIES</span>
+        <span>&gt;</span>
+      </button>
+      <button class="nav-item" data-category="GAMES">
+        <span>GAMES</span>
+      </button>
+      <button class="nav-item" data-category="SOFTWARE">
+        <span>SOFTWARE</span>
+      </button>
+      <button class="nav-item" data-category="TUTORIAL">
+        <span>TUTORIAL</span>
+      </button>
+    </nav>
+  </aside>
+
   <header class="topbar">
-    <button class="menu-btn" aria-label="Menu">☰</button>
+    <button class="menu-btn" id="openDrawerBtn" aria-label="Menu">☰</button>
     <div class="brand">CINEMA HUTY</div>
     <span style="width: 20px;"></span>
   </header>
@@ -178,13 +328,18 @@
     />
   </div>
 
+  <div class="active-filter-bar">
+    <span id="filterStatus">Category: ALL</span>
+    <button class="reset-btn" id="resetFilterBtn">Show All</button>
+  </div>
+
   <section class="section">
     <div class="section-header">
       <span>🔥</span>
       <h2 class="section-title">Weekly Top 20 Trending</h2>
     </div>
     <div class="row-scroll" id="trendingList">
-      <div class="movie-card" data-title="Operation Shadow">
+      <div class="movie-card" data-title="Operation Shadow" data-category="MOVIE">
         <div class="poster">
           <span class="rank-badge">#1</span>
           <span>POSTER 01</span>
@@ -198,7 +353,7 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Midnight Echo">
+      <div class="movie-card" data-title="Midnight Echo" data-category="TV SERIES">
         <div class="poster">
           <span class="rank-badge">#2</span>
           <span>POSTER 02</span>
@@ -212,13 +367,13 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Lost Horizon">
+      <div class="movie-card" data-title="Cyber Quest" data-category="GAMES">
         <div class="poster">
           <span class="rank-badge">#3</span>
-          <span>POSTER 03</span>
+          <span>GAME 01</span>
         </div>
         <div class="movie-info">
-          <div class="movie-title">Lost Horizon</div>
+          <div class="movie-title">Cyber Quest</div>
           <div class="movie-meta">
             <span>2026</span>
             <span>765 Hits</span>
@@ -234,7 +389,7 @@
       <h2 class="section-title">Continue Watching</h2>
     </div>
     <div class="row-scroll" id="continueList">
-      <div class="movie-card" data-title="The Last Signal">
+      <div class="movie-card" data-title="The Last Signal" data-category="TV SERIES">
         <div class="poster">
           <span class="progress-badge">58%</span>
           <span>WATCHING 01</span>
@@ -248,16 +403,30 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="City of Dust">
+      <div class="movie-card" data-title="Pro Media Pack" data-category="SOFTWARE">
         <div class="poster">
           <span class="progress-badge">32%</span>
-          <span>WATCHING 02</span>
+          <span>SOFTWARE 01</span>
         </div>
         <div class="movie-info">
-          <div class="movie-title">City of Dust</div>
+          <div class="movie-title">Pro Media Pack</div>
           <div class="movie-meta">
-            <span>Movie</span>
+            <span>v2.4</span>
             <span>1080p</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="movie-card" data-title="Web Setup Guide" data-category="TUTORIAL">
+        <div class="poster">
+          <span class="progress-badge">80%</span>
+          <span>TUTORIAL 01</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">Web Setup Guide</div>
+          <div class="movie-meta">
+            <span>Part 02</span>
+            <span>HD</span>
           </div>
         </div>
       </div>
@@ -265,16 +434,72 @@
   </section>
 
   <script>
+    const openDrawerBtn = document.getElementById("openDrawerBtn");
+    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+    const sideDrawer = document.getElementById("sideDrawer");
+    const drawerBackdrop = document.getElementById("drawerBackdrop");
+    const drawerSearchBtn = document.getElementById("drawerSearchBtn");
     const searchInput = document.getElementById("searchInput");
+    const navItems = document.querySelectorAll(".nav-item");
     const cards = document.querySelectorAll(".movie-card");
+    const filterStatus = document.getElementById("filterStatus");
+    const resetFilterBtn = document.getElementById("resetFilterBtn");
 
-    searchInput.addEventListener("input", () => {
+    let selectedCategory = "ALL";
+
+    function openDrawer() {
+      sideDrawer.classList.add("open");
+      drawerBackdrop.classList.add("open");
+    }
+
+    function closeDrawer() {
+      sideDrawer.classList.remove("open");
+      drawerBackdrop.classList.remove("open");
+    }
+
+    function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
+      filterStatus.textContent = `Category: ${selectedCategory}`;
+
       cards.forEach((card) => {
         const title = card.getAttribute("data-title").toLowerCase();
-        card.style.display = title.includes(q) ? "block" : "none";
+        const category = card.getAttribute("data-category");
+        const matchCategory = selectedCategory === "ALL" || category === selectedCategory;
+        const matchSearch = title.includes(q);
+        card.style.display = matchCategory && matchSearch ? "block" : "none";
+      });
+    }
+
+    openDrawerBtn.addEventListener("click", openDrawer);
+    closeDrawerBtn.addEventListener("click", closeDrawer);
+    drawerBackdrop.addEventListener("click", closeDrawer);
+
+    drawerSearchBtn.addEventListener("click", () => {
+      closeDrawer();
+      searchInput.focus();
+      searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        navItems.forEach((btn) => btn.classList.remove("active"));
+        item.classList.add("active");
+        selectedCategory = item.getAttribute("data-category");
+        applyFilters();
+        closeDrawer();
       });
     });
+
+    resetFilterBtn.addEventListener("click", () => {
+      selectedCategory = "ALL";
+      searchInput.value = "";
+      navItems.forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-category") === "ALL");
+      });
+      applyFilters();
+    });
+
+    searchInput.addEventListener("input", applyFilters);
   </script>
 </body>
 </html>
