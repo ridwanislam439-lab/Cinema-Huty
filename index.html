@@ -1,170 +1,388 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cinema Huty</title>
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
-      background-color: #0f1117;
-      color: #f3f4f6;
-      line-height: 1.6;
+      background-color: #0b0d10;
+      color: #ffffff;
+      padding-bottom: 75px;
     }
 
-    header {
-      background: #161922;
-      padding: 18px 24px;
-      border-bottom: 1px solid #262b38;
+    #loader {
+      position: fixed;
+      inset: 0;
+      background-color: #0b1320;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      z-index: 99999;
+      transition: opacity 0.4s ease;
+    }
+
+    .loader-brand {
+      color: #f4b400;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #f4b400;
+      opacity: 0.25;
+      animation: dotPulse 1.2s infinite ease-in-out;
+    }
+
+    .dots span:nth-child(2) { animation-delay: 0.2s; }
+    .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    .top-bar {
       position: sticky;
       top: 0;
+      z-index: 1000;
+      background: #0b0d10;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #181b22;
     }
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #ff4757;
-      letter-spacing: 0.5px;
-    }
-
-    .badge {
-      font-size: 0.8rem;
-      background: #232836;
-      color: #d1d5db;
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .hero {
-      padding: 48px 24px;
-      text-align: center;
-      background: linear-gradient(180deg, #191d29 0%, #0f1117 100%);
-    }
-
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 12px;
-      color: #ffffff;
-    }
-
-    .hero p {
-      max-width: 600px;
-      margin: 0 auto 24px;
-      color: #9ca3af;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #ff4757;
-      color: #fff;
-      text-decoration: none;
-      padding: 12px 22px;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 32px 20px 56px;
-    }
-
-    .section-title {
-      font-size: 1.25rem;
-      margin-bottom: 20px;
-      border-left: 4px solid #ff4757;
-      padding-left: 12px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      background: #171a24;
-      border: 1px solid #262b38;
-      border-radius: 12px;
-      padding: 18px;
-    }
-
-    .poster-box {
-      height: 130px;
-      border-radius: 8px;
-      background: #222736;
+    .brand-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #22c55e;
+      color: #000;
+      font-weight: 800;
+      font-size: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #ff6b81;
-      margin-bottom: 14px;
+      flex-shrink: 0;
     }
 
-    .card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 6px;
+    .search-pill {
+      flex: 1;
+      background: #262930;
+      border-radius: 20px;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .card p {
-      font-size: 0.9rem;
+    .search-pill input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .main-tabs {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .live-pill {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .m-tab {
       color: #9ca3af;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    footer {
-      text-align: center;
-      padding: 24px;
-      border-top: 1px solid #222633;
-      color: #6b7280;
-      font-size: 0.85rem;
+    .m-tab.active {
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .section-block {
+      margin-bottom: 22px;
+    }
+
+    .sec-header {
+      padding: 0 14px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sec-header h3 {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .poster-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 14px;
+      overflow-x: auto;
+    }
+
+    .movie-card {
+      min-width: 122px;
+      max-width: 122px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .poster-box {
+      width: 122px;
+      height: 168px;
+      border-radius: 8px;
+      background: #1a1e26;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 6px;
+      border: 1px solid #252a34;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #facc15;
+      color: #000;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .lang-tag {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .movie-name {
+      font-size: 12px;
+      color: #e5e7eb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #12151a;
+      border-top: 1px solid #1f232b;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 10px;
+      z-index: 1000;
+    }
+
+    .b-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #9ca3af;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .b-item.active {
+      color: #22c55e;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Cinema Huty</div>
-    <div class="badge">GitHub Pages Live</div>
+
+  <div id="loader">
+    <div>
+      <div class="loader-brand">CINEMA HUTY</div>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <header class="top-bar">
+    <div class="brand-avatar">CH</div>
+    <div class="search-pill">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Search Movie, Series, Live TV..." onkeyup="renderAll()" />
+    </div>
   </header>
 
-  <section class="hero">
-    <h1>স্বাগতম Cinema Huty-তে</h1>
-    <p>আপনার প্রথম ওয়েবসাইটটি এখন সফলভাবে লাইভ হয়েছে। এখানে আপনি আপনার পছন্দের মুভি, রিভিউ বা প্রজেক্টের তথ্য সহজেই সাজাতে পারবেন।</p>
-    <a href="#featured" class="btn">কালেকশন দেখুন</a>
-  </section>
+  <nav class="main-tabs">
+    <span class="live-pill" onclick="switchTab('LIVE', this)">● LIVE TV</span>
+    <span class="m-tab active" onclick="switchTab('ALL', this)">Trending</span>
+    <span class="m-tab" onclick="switchTab('MOVIE', this)">Movies</span>
+    <span class="m-tab" onclick="switchTab('SERIES', this)">TV Series</span>
+  </nav>
 
-  <main class="container" id="featured">
-    <h2 class="section-title">ফিচার্ড সেকশন</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="poster-box">MOVIE 01</div>
-        <h3>প্রথম ফিচার</h3>
-        <p>এখানে আপনার প্রথম সিনেমার নাম, সাল বা সংক্ষিপ্ত বিবরণ যুক্ত করতে পারেন।</p>
-      </div>
-      <div class="card">
-        <div class="poster-box">MOVIE 02</div>
-        <h3>দ্বিতীয় ফিচার</h3>
-        <p>কোডের ভেতর লেখা পরিবর্তন করে নিজের মতো শিরোনাম ও বর্ণনা বসিয়ে নিন।</p>
-      </div>
-      <div class="card">
-        <div class="poster-box">MOVIE 03</div>
-        <h3>তৃতীয় ফিচার</h3>
-        <p>ধাপে ধাপে নতুন সেকশন, বাটন বা ছবি যোগ করে সাইটটি আরও সমৃদ্ধ করুন।</p>
-      </div>
-    </div>
+  <main id="appContainer">
+    <section class="section-block" id="liveSection">
+      <div class="sec-header"><h3>Live TV Channels</h3></div>
+      <div class="poster-row" id="liveList"></div>
+    </section>
+
+    <section class="section-block" id="movieSection">
+      <div class="sec-header"><h3>Movies</h3></div>
+      <div class="poster-row" id="movieList"></div>
+    </section>
+
+    <section class="section-block" id="seriesSection">
+      <div class="sec-header"><h3>TV Series</h3></div>
+      <div class="poster-row" id="seriesList"></div>
+    </section>
   </main>
 
-  <footer>
-    © 2026 Cinema Huty • তৈরি হয়েছে GitHub Pages-এ
+  <footer class="bottom-nav">
+    <div class="b-item active" onclick="switchTab('ALL', this)"><span>🏠</span><span>Home</span></div>
+    <div class="b-item" onclick="switchTab('LIVE', this)"><span>📺</span><span>Live TV</span></div>
+    <div class="b-item" onclick="switchTab('MOVIE', this)"><span>🎬</span><span>Movies</span></div>
+    <div class="b-item" onclick="switchTab('SERIES', this)"><span>🎞️</span><span>Series</span></div>
   </footer>
+
+  <script>
+    // এখানে আপনার Movie, Series এবং Live TV চ্যানেলের লিস্ট যোগ করুন
+    const SERVER_DATA = [
+      {
+        type: "LIVE",
+        title: "T Sports HD",
+        tag: "LIVE",
+        poster: "",
+        url: "#tsports-stream-link"
+      },
+      {
+        type: "LIVE",
+        title: "Sony Ten 1",
+        tag: "LIVE",
+        poster: "",
+        url: "#sony1-stream-link"
+      },
+      {
+        type: "MOVIE",
+        title: "Bangla Movie 2026",
+        tag: "Bangla",
+        poster: "",
+        url: "#bangla-movie-link"
+      },
+      {
+        type: "MOVIE",
+        title: "Action Blockbuster",
+        tag: "Hindi",
+        poster: "",
+        url: "#hindi-movie-link"
+      },
+      {
+        type: "SERIES",
+        title: "Nine to Six (S01)",
+        tag: "Series",
+        poster: "",
+        url: "#series-link"
+      },
+      {
+        type: "SERIES",
+        title: "Naruto Shippuden",
+        tag: "Anime",
+        poster: "",
+        url: "#anime-link"
+      }
+    ];
+
+    let currentFilter = "ALL";
+
+    window.addEventListener("load", function () {
+      const loader = document.getElementById("loader");
+      setTimeout(() => {
+        loader.style.opacity = "0";
+        setTimeout(() => loader.style.display = "none", 400);
+      }, 400);
+      renderAll();
+    });
+
+    function switchTab(type, el) {
+      currentFilter = type;
+      document.querySelectorAll(".m-tab, .b-item").forEach(item => item.classList.remove("active"));
+      if (el) el.classList.add("active");
+
+      document.getElementById("liveSection").style.display = (type === "ALL" || type === "LIVE") ? "block" : "none";
+      document.getElementById("movieSection").style.display = (type === "ALL" || type === "MOVIE") ? "block" : "none";
+      document.getElementById("seriesSection").style.display = (type === "ALL" || type === "SERIES") ? "block" : "none";
+    }
+
+    function createCard(item, index) {
+      const bgStyle = item.poster ? `style="background-image: url('${item.poster}')"` : "";
+      return `
+        <a class="movie-card" href="${item.url}" target="_blank">
+          <div class="poster-box" ${bgStyle}>
+            <span class="rank-badge">${index + 1}</span>
+            <span class="lang-tag">${item.tag}</span>
+          </div>
+          <div class="movie-name">${item.title}</div>
+        </a>
+      `;
+    }
+
+    function renderAll() {
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = SERVER_DATA.filter(item => item.title.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q));
+
+      const lives = filtered.filter(i => i.type === "LIVE");
+      const movies = filtered.filter(i => i.type === "MOVIE");
+      const series = filtered.filter(i => i.type === "SERIES");
+
+      document.getElementById("liveList").innerHTML = lives.map((item, i) => createCard(item, i)).join("") || "<p style='padding:0 14px;color:#9ca3af;font-size:13px;'>No Live TV added</p>";
+      document.getElementById("movieList").innerHTML = movies.map((item, i) => createCard(item, i)).join("") || "<p style='padding:0 14px;color:#9ca3af;font-size:13px;'>No Movies added</p>";
+      document.getElementById("seriesList").innerHTML = series.map((item, i) => createCard(item, i)).join("") || "<p style='padding:0 14px;color:#9ca3af;font-size:13px;'>No Series added</p>";
+    }
+  </script>
 </body>
 </html>
