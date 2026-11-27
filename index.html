@@ -15,7 +15,7 @@
     body {
       background-color: #0b0e17;
       color: #f3f4f6;
-      padding-bottom: 48px;
+      padding-bottom: 56px;
     }
 
     .topbar {
@@ -156,7 +156,6 @@
       outline: none;
     }
 
-    /* সবসময় দৃশ্যমান ক্যাটাগরি বার */
     .category-bar {
       display: flex;
       gap: 8px;
@@ -185,6 +184,61 @@
       background: #2563eb;
       border-color: #3b82f6;
       color: #ffffff;
+    }
+
+    .player-banner {
+      margin: 12px 18px 0;
+      padding: 14px;
+      background: #131a2e;
+      border: 1px solid #2a3961;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .player-banner.active {
+      display: block;
+    }
+
+    .player-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+
+    .player-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .player-close {
+      background: #1e2947;
+      color: #e5e7eb;
+      border: 1px solid #334575;
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .player-url {
+      font-size: 0.8rem;
+      color: #93c5fd;
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+
+    .player-link-btn {
+      display: inline-block;
+      background: #ef4444;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
     }
 
     .section {
@@ -225,6 +279,11 @@
       overflow: hidden;
       border: 1px solid #202942;
       flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .movie-card:hover {
+      border-color: #3b82f6;
     }
 
     .poster {
@@ -240,6 +299,19 @@
       font-weight: 700;
       background-size: cover;
       background-position: center;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #ef4444;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 5px;
+      letter-spacing: 0.5px;
     }
 
     .rank-badge {
@@ -302,6 +374,7 @@
 
     <nav class="nav-list">
       <button class="nav-item active" data-category="ALL"><span>HOME</span></button>
+      <button class="nav-item" data-category="LIVE TV"><span>LIVE TV</span><span>&gt;</span></button>
       <button class="nav-item" data-category="MOVIE"><span>MOVIE</span><span>&gt;</span></button>
       <button class="nav-item" data-category="TV SERIES"><span>TV SERIES</span><span>&gt;</span></button>
       <button class="nav-item" data-category="GAMES"><span>GAMES</span></button>
@@ -321,12 +394,13 @@
       type="text"
       id="searchInput"
       class="search-box"
-      placeholder="Search movie / series..."
+      placeholder="Search movie / live tv / series..."
     />
   </div>
 
   <div class="category-bar" id="categoryBar">
     <button class="cat-pill active" data-category="ALL">ALL</button>
+    <button class="cat-pill" data-category="LIVE TV">LIVE TV</button>
     <button class="cat-pill" data-category="MOVIE">MOVIE</button>
     <button class="cat-pill" data-category="TV SERIES">TV SERIES</button>
     <button class="cat-pill" data-category="GAMES">GAMES</button>
@@ -334,13 +408,30 @@
     <button class="cat-pill" data-category="TUTORIAL">TUTORIAL</button>
   </div>
 
+  <div class="player-banner" id="playerBanner">
+    <div class="player-top">
+      <div class="player-title" id="playerTitle">Selected Item</div>
+      <button class="player-close" id="closePlayerBtn">Close</button>
+    </div>
+    <div class="player-url" id="playerUrl"></div>
+    <a class="player-link-btn" id="playerOpenLink" href="#" target="_blank" rel="noopener noreferrer">Open Stream</a>
+  </div>
+
+  <section class="section">
+    <div class="section-header">
+      <span>📺</span>
+      <h2 class="section-title">Live TV</h2>
+    </div>
+    <div class="row-scroll" id="liveTvList"></div>
+  </section>
+
   <section class="section">
     <div class="section-header">
       <span>🔥</span>
       <h2 class="section-title">Weekly Top 20 Trending</h2>
     </div>
     <div class="row-scroll" id="trendingList">
-      <div class="movie-card" data-title="Operation Shadow" data-category="MOVIE">
+      <div class="movie-card" data-title="Operation Shadow" data-category="MOVIE" data-stream="https://example.com/movies/operation-shadow">
         <div class="poster">
           <span class="rank-badge">#1</span>
           <span>POSTER 01</span>
@@ -354,7 +445,7 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Midnight Echo" data-category="TV SERIES">
+      <div class="movie-card" data-title="Midnight Echo" data-category="TV SERIES" data-stream="https://example.com/series/midnight-echo">
         <div class="poster">
           <span class="rank-badge">#2</span>
           <span>POSTER 02</span>
@@ -368,7 +459,7 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Cyber Quest" data-category="GAMES">
+      <div class="movie-card" data-title="Cyber Quest" data-category="GAMES" data-stream="https://example.com/games/cyber-quest">
         <div class="poster">
           <span class="rank-badge">#3</span>
           <span>GAME 01</span>
@@ -390,7 +481,7 @@
       <h2 class="section-title">Continue Watching</h2>
     </div>
     <div class="row-scroll" id="continueList">
-      <div class="movie-card" data-title="The Last Signal" data-category="TV SERIES">
+      <div class="movie-card" data-title="The Last Signal" data-category="TV SERIES" data-stream="https://example.com/series/last-signal">
         <div class="poster">
           <span class="progress-badge">58%</span>
           <span>WATCHING 01</span>
@@ -404,7 +495,7 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Pro Media Pack" data-category="SOFTWARE">
+      <div class="movie-card" data-title="Pro Media Pack" data-category="SOFTWARE" data-stream="https://example.com/software/media-pack">
         <div class="poster">
           <span class="progress-badge">32%</span>
           <span>SOFTWARE 01</span>
@@ -418,7 +509,7 @@
         </div>
       </div>
 
-      <div class="movie-card" data-title="Web Setup Guide" data-category="TUTORIAL">
+      <div class="movie-card" data-title="Web Setup Guide" data-category="TUTORIAL" data-stream="https://example.com/tutorial/web-setup">
         <div class="poster">
           <span class="progress-badge">80%</span>
           <span>TUTORIAL 01</span>
@@ -435,6 +526,15 @@
   </section>
 
   <script>
+    // বাইরের চ্যানেলগুলোর নাম, দেশ/ক্যাটাগরি ও স্ট্রিম লিংক এখানে বসিয়ে দিন
+    const liveChannelsData = [
+      { name: "World News HD", region: "Global", quality: "HD", stream: "https://example.com/live/world-news.m3u8" },
+      { name: "Action Cinema 24/7", region: "USA", quality: "1080p", stream: "https://example.com/live/action-cinema.m3u8" },
+      { name: "Sports Arena Live", region: "UK", quality: "HD", stream: "https://example.com/live/sports-arena.m3u8" },
+      { name: "Kids Fun TV", region: "Global", quality: "HD", stream: "https://example.com/live/kids-fun.m3u8" }
+    ];
+
+    const liveTvList = document.getElementById("liveTvList");
     const openDrawerBtn = document.getElementById("openDrawerBtn");
     const closeDrawerBtn = document.getElementById("closeDrawerBtn");
     const sideDrawer = document.getElementById("sideDrawer");
@@ -443,9 +543,59 @@
     const searchInput = document.getElementById("searchInput");
     const navItems = document.querySelectorAll(".nav-item");
     const catPills = document.querySelectorAll(".cat-pill");
-    const cards = document.querySelectorAll(".movie-card");
+    const playerBanner = document.getElementById("playerBanner");
+    const playerTitle = document.getElementById("playerTitle");
+    const playerUrl = document.getElementById("playerUrl");
+    const playerOpenLink = document.getElementById("playerOpenLink");
+    const closePlayerBtn = document.getElementById("closePlayerBtn");
 
     let selectedCategory = "ALL";
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function bindCardClick(card) {
+      card.addEventListener("click", () => {
+        const title = card.getAttribute("data-title");
+        const stream = card.getAttribute("data-stream") || "#";
+        playerTitle.textContent = title;
+        playerUrl.textContent = stream;
+        playerOpenLink.href = stream;
+        playerBanner.classList.add("active");
+        playerBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    }
+
+    function renderLiveChannels() {
+      liveTvList.innerHTML = "";
+      liveChannelsData.forEach((ch, index) => {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+        card.setAttribute("data-title", ch.name);
+        card.setAttribute("data-category", "LIVE TV");
+        card.setAttribute("data-stream", ch.stream);
+        card.innerHTML = `
+          <div class="poster">
+            <span class="live-badge">LIVE</span>
+            <span>TV ${String(index + 1).padStart(2, "0")}</span>
+          </div>
+          <div class="movie-info">
+            <div class="movie-title">${escapeHtml(ch.name)}</div>
+            <div class="movie-meta">
+              <span>${escapeHtml(ch.region || "Live")}</span>
+              <span>${escapeHtml(ch.quality || "HD")}</span>
+            </div>
+          </div>
+        `;
+        bindCardClick(card);
+        liveTvList.appendChild(card);
+      });
+    }
 
     function openDrawer() {
       sideDrawer.classList.add("open");
@@ -469,6 +619,7 @@
 
     function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
+      const cards = document.querySelectorAll(".movie-card");
       cards.forEach((card) => {
         const title = card.getAttribute("data-title").toLowerCase();
         const category = card.getAttribute("data-category");
@@ -477,6 +628,9 @@
         card.style.display = matchCategory && matchSearch ? "block" : "none";
       });
     }
+
+    renderLiveChannels();
+    document.querySelectorAll(".movie-card").forEach(bindCardClick);
 
     openDrawerBtn.addEventListener("click", openDrawer);
     closeDrawerBtn.addEventListener("click", closeDrawer);
@@ -501,6 +655,10 @@
         syncCategoryButtons(pill.getAttribute("data-category"));
         applyFilters();
       });
+    });
+
+    closePlayerBtn.addEventListener("click", () => {
+      playerBanner.classList.remove("active");
     });
 
     searchInput.addEventListener("input", applyFilters);
