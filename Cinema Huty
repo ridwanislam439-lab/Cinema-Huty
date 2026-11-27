@@ -13,158 +13,268 @@
     }
 
     body {
-      background-color: #0f1117;
+      background-color: #0b0e17;
       color: #f3f4f6;
-      line-height: 1.6;
+      padding-bottom: 48px;
     }
 
-    header {
-      background: #161922;
-      padding: 18px 24px;
-      border-bottom: 1px solid #262b38;
+    .topbar {
+      background: #121726;
+      padding: 16px 18px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1f273d;
       position: sticky;
       top: 0;
+      z-index: 20;
     }
 
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #ff4757;
-      letter-spacing: 0.5px;
+    .menu-btn {
+      font-size: 1.3rem;
+      color: #e5e7eb;
+      background: none;
+      border: none;
     }
 
-    .badge {
-      font-size: 0.8rem;
-      background: #232836;
-      color: #d1d5db;
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .hero {
-      padding: 48px 24px;
-      text-align: center;
-      background: linear-gradient(180deg, #191d29 0%, #0f1117 100%);
-    }
-
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 12px;
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 2px;
       color: #ffffff;
+      text-shadow: 0 0 12px rgba(255, 71, 87, 0.55);
     }
 
-    .hero p {
-      max-width: 600px;
-      margin: 0 auto 24px;
-      color: #9ca3af;
+    .search-wrap {
+      padding: 14px 18px 6px;
     }
 
-    .btn {
-      display: inline-block;
-      background: #ff4757;
+    .search-box {
+      width: 100%;
+      background: #151b2e;
+      border: 1px solid #26314d;
+      border-radius: 10px;
+      padding: 12px 14px;
       color: #fff;
-      text-decoration: none;
-      padding: 12px 22px;
-      border-radius: 8px;
-      font-weight: 600;
+      font-size: 0.95rem;
+      outline: none;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 32px 20px 56px;
+    .section {
+      padding: 18px 0 6px 18px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-right: 18px;
     }
 
     .section-title {
-      font-size: 1.25rem;
-      margin-bottom: 20px;
-      border-left: 4px solid #ff4757;
-      padding-left: 12px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #ffffff;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+    .row-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-right: 18px;
+      scrollbar-width: none;
     }
 
-    .card {
-      background: #171a24;
-      border: 1px solid #262b38;
-      border-radius: 12px;
-      padding: 18px;
+    .row-scroll::-webkit-scrollbar {
+      display: none;
     }
 
-    .poster-box {
-      height: 130px;
-      border-radius: 8px;
-      background: #222736;
+    .movie-card {
+      min-width: 155px;
+      max-width: 155px;
+      background: #131828;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #202942;
+      flex-shrink: 0;
+    }
+
+    .poster {
+      position: relative;
+      height: 215px;
+      background: linear-gradient(135deg, #242b45, #141826);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #ff6b81;
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 6px;
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: #9ca3af;
-    }
-
-    footer {
       text-align: center;
-      padding: 24px;
-      border-top: 1px solid #222633;
-      color: #6b7280;
-      font-size: 0.85rem;
+      padding: 10px;
+      color: #ff6b81;
+      font-weight: 700;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #f5b700;
+      color: #111;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 3px 7px;
+      border-radius: 5px;
+    }
+
+    .progress-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(15, 23, 42, 0.88);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 3px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .movie-info {
+      padding: 10px;
+    }
+
+    .movie-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #f9fafb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .movie-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #9ca3af;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Cinema Huty</div>
-    <div class="badge">GitHub Pages Live</div>
+  <header class="topbar">
+    <button class="menu-btn" aria-label="Menu">☰</button>
+    <div class="brand">CINEMA HUTY</div>
+    <span style="width: 20px;"></span>
   </header>
 
-  <section class="hero">
-    <h1>স্বাগতম Cinema Huty-তে</h1>
-    <p>আপনার প্রথম ওয়েবসাইটটি এখন সফলভাবে লাইভ হয়েছে। এখানে আপনি আপনার পছন্দের মুভি, রিভিউ বা প্রজেক্টের তথ্য সহজেই সাজাতে পারবেন।</p>
-    <a href="#featured" class="btn">কালেকশন দেখুন</a>
-  </section>
+  <div class="search-wrap">
+    <input
+      type="text"
+      id="searchInput"
+      class="search-box"
+      placeholder="Search movie / series..."
+    />
+  </div>
 
-  <main class="container" id="featured">
-    <h2 class="section-title">ফিচার্ড সেকশন</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="poster-box">MOVIE 01</div>
-        <h3>প্রথম ফিচার</h3>
-        <p>এখানে আপনার প্রথম সিনেমার নাম, সাল বা সংক্ষিপ্ত বিবরণ যুক্ত করতে পারেন।</p>
+  <section class="section">
+    <div class="section-header">
+      <span>🔥</span>
+      <h2 class="section-title">Weekly Top 20 Trending</h2>
+    </div>
+    <div class="row-scroll" id="trendingList">
+      <div class="movie-card" data-title="Operation Shadow">
+        <div class="poster">
+          <span class="rank-badge">#1</span>
+          <span>POSTER 01</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">Operation Shadow</div>
+          <div class="movie-meta">
+            <span>2026</span>
+            <span>1,431 Hits</span>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <div class="poster-box">MOVIE 02</div>
-        <h3>দ্বিতীয় ফিচার</h3>
-        <p>কোডের ভেতর লেখা পরিবর্তন করে নিজের মতো শিরোনাম ও বর্ণনা বসিয়ে নিন।</p>
+
+      <div class="movie-card" data-title="Midnight Echo">
+        <div class="poster">
+          <span class="rank-badge">#2</span>
+          <span>POSTER 02</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">Midnight Echo</div>
+          <div class="movie-meta">
+            <span>2025</span>
+            <span>980 Hits</span>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <div class="poster-box">MOVIE 03</div>
-        <h3>তৃতীয় ফিচার</h3>
-        <p>ধাপে ধাপে নতুন সেকশন, বাটন বা ছবি যোগ করে সাইটটি আরও সমৃদ্ধ করুন।</p>
+
+      <div class="movie-card" data-title="Lost Horizon">
+        <div class="poster">
+          <span class="rank-badge">#3</span>
+          <span>POSTER 03</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">Lost Horizon</div>
+          <div class="movie-meta">
+            <span>2026</span>
+            <span>765 Hits</span>
+          </div>
+        </div>
       </div>
     </div>
-  </main>
+  </section>
 
-  <footer>
-    © 2026 Cinema Huty • তৈরি হয়েছে GitHub Pages-এ
-  </footer>
+  <section class="section">
+    <div class="section-header">
+      <span>▶</span>
+      <h2 class="section-title">Continue Watching</h2>
+    </div>
+    <div class="row-scroll" id="continueList">
+      <div class="movie-card" data-title="The Last Signal">
+        <div class="poster">
+          <span class="progress-badge">58%</span>
+          <span>WATCHING 01</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">The Last Signal</div>
+          <div class="movie-meta">
+            <span>Episode 04</span>
+            <span>HD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="movie-card" data-title="City of Dust">
+        <div class="poster">
+          <span class="progress-badge">32%</span>
+          <span>WATCHING 02</span>
+        </div>
+        <div class="movie-info">
+          <div class="movie-title">City of Dust</div>
+          <div class="movie-meta">
+            <span>Movie</span>
+            <span>1080p</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = document.querySelectorAll(".movie-card");
+
+    searchInput.addEventListener("input", () => {
+      const q = searchInput.value.toLowerCase().trim();
+      cards.forEach((card) => {
+        const title = card.getAttribute("data-title").toLowerCase();
+        card.style.display = title.includes(q) ? "block" : "none";
+      });
+    });
+  </script>
 </body>
 </html>
