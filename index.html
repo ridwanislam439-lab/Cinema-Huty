@@ -46,7 +46,6 @@
       text-shadow: 0 0 12px rgba(255, 71, 87, 0.55);
     }
 
-    /* সাইড মেনু ওভারলে ও ড্রয়ার */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -143,7 +142,7 @@
     }
 
     .search-wrap {
-      padding: 14px 18px 6px;
+      padding: 14px 18px 8px;
     }
 
     .search-box {
@@ -157,23 +156,35 @@
       outline: none;
     }
 
-    .active-filter-bar {
-      padding: 8px 18px 0;
+    /* সবসময় দৃশ্যমান ক্যাটাগরি বার */
+    .category-bar {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: #9ca3af;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px 18px 4px;
+      scrollbar-width: none;
     }
 
-    .reset-btn {
-      background: #1b2338;
-      color: #f3f4f6;
-      border: 1px solid #2d3a5c;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 0.78rem;
+    .category-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-pill {
+      background: #151b2e;
+      color: #d1d5db;
+      border: 1px solid #26314d;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
       cursor: pointer;
+    }
+
+    .cat-pill.active {
+      background: #2563eb;
+      border-color: #3b82f6;
+      color: #ffffff;
     }
 
     .section {
@@ -290,26 +301,12 @@
     <button class="open-search-btn" id="drawerSearchBtn">? OPEN SEARCH</button>
 
     <nav class="nav-list">
-      <button class="nav-item active" data-category="ALL">
-        <span>HOME</span>
-      </button>
-      <button class="nav-item" data-category="MOVIE">
-        <span>MOVIE</span>
-        <span>&gt;</span>
-      </button>
-      <button class="nav-item" data-category="TV SERIES">
-        <span>TV SERIES</span>
-        <span>&gt;</span>
-      </button>
-      <button class="nav-item" data-category="GAMES">
-        <span>GAMES</span>
-      </button>
-      <button class="nav-item" data-category="SOFTWARE">
-        <span>SOFTWARE</span>
-      </button>
-      <button class="nav-item" data-category="TUTORIAL">
-        <span>TUTORIAL</span>
-      </button>
+      <button class="nav-item active" data-category="ALL"><span>HOME</span></button>
+      <button class="nav-item" data-category="MOVIE"><span>MOVIE</span><span>&gt;</span></button>
+      <button class="nav-item" data-category="TV SERIES"><span>TV SERIES</span><span>&gt;</span></button>
+      <button class="nav-item" data-category="GAMES"><span>GAMES</span></button>
+      <button class="nav-item" data-category="SOFTWARE"><span>SOFTWARE</span></button>
+      <button class="nav-item" data-category="TUTORIAL"><span>TUTORIAL</span></button>
     </nav>
   </aside>
 
@@ -328,9 +325,13 @@
     />
   </div>
 
-  <div class="active-filter-bar">
-    <span id="filterStatus">Category: ALL</span>
-    <button class="reset-btn" id="resetFilterBtn">Show All</button>
+  <div class="category-bar" id="categoryBar">
+    <button class="cat-pill active" data-category="ALL">ALL</button>
+    <button class="cat-pill" data-category="MOVIE">MOVIE</button>
+    <button class="cat-pill" data-category="TV SERIES">TV SERIES</button>
+    <button class="cat-pill" data-category="GAMES">GAMES</button>
+    <button class="cat-pill" data-category="SOFTWARE">SOFTWARE</button>
+    <button class="cat-pill" data-category="TUTORIAL">TUTORIAL</button>
   </div>
 
   <section class="section">
@@ -441,9 +442,8 @@
     const drawerSearchBtn = document.getElementById("drawerSearchBtn");
     const searchInput = document.getElementById("searchInput");
     const navItems = document.querySelectorAll(".nav-item");
+    const catPills = document.querySelectorAll(".cat-pill");
     const cards = document.querySelectorAll(".movie-card");
-    const filterStatus = document.getElementById("filterStatus");
-    const resetFilterBtn = document.getElementById("resetFilterBtn");
 
     let selectedCategory = "ALL";
 
@@ -457,10 +457,18 @@
       drawerBackdrop.classList.remove("open");
     }
 
+    function syncCategoryButtons(category) {
+      selectedCategory = category;
+      navItems.forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-category") === category);
+      });
+      catPills.forEach((pill) => {
+        pill.classList.toggle("active", pill.getAttribute("data-category") === category);
+      });
+    }
+
     function applyFilters() {
       const q = searchInput.value.toLowerCase().trim();
-      filterStatus.textContent = `Category: ${selectedCategory}`;
-
       cards.forEach((card) => {
         const title = card.getAttribute("data-title").toLowerCase();
         const category = card.getAttribute("data-category");
@@ -482,21 +490,17 @@
 
     navItems.forEach((item) => {
       item.addEventListener("click", () => {
-        navItems.forEach((btn) => btn.classList.remove("active"));
-        item.classList.add("active");
-        selectedCategory = item.getAttribute("data-category");
+        syncCategoryButtons(item.getAttribute("data-category"));
         applyFilters();
         closeDrawer();
       });
     });
 
-    resetFilterBtn.addEventListener("click", () => {
-      selectedCategory = "ALL";
-      searchInput.value = "";
-      navItems.forEach((btn) => {
-        btn.classList.toggle("active", btn.getAttribute("data-category") === "ALL");
+    catPills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        syncCategoryButtons(pill.getAttribute("data-category"));
+        applyFilters();
       });
-      applyFilters();
     });
 
     searchInput.addEventListener("input", applyFilters);
