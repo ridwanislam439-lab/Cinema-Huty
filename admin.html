@@ -3,22 +3,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - CINEMA HUTY</title>
+  <title>CINEMA HUTY</title>
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1120;
+      color: #f8fafc;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .admin-btn {
+      background: #eab308;
+      color: #0f172a;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .container {
       padding: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #f8fafc;
+      font-size: 15px;
+    }
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+      padding-bottom: 4px;
+    }
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      background: #1e293b;
+      color: #f8fafc;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px;
     }
     .card {
       background: #1e293b;
-      padding: 24px;
-      border-radius: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card img {
       width: 100%;
-      max-width
+      height: 210px;
+      object-fit: cover;
+      display: block;
+      background: #0f172a;
+    }
+    .card-body {
+      padding: 10px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .card-cat {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .empty {
+      color: #94a3b8;
+      text-align: center;
+      padding: 30px 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">CINEMA HUTY</div>
+    <a class="admin-btn" href="admin.html">Admin</a>
+  </header>
+
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search movie / live tv / series..." />
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-cat="ALL">ALL</button>
+      <button class="filter-btn" data-cat="LIVE TV">LIVE TV</button>
+      <button class="filter-btn" data-cat="MOVIE">MOVIE</button>
+      <button class="filter-btn" data-cat="TV SERIES">TV SERIES</button>
+    </div>
+
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <script>
+    let allItems = [];
+    let currentCategory = "ALL";
+    let searchQuery = "";
+
+    const gridEl = document.getElementById("grid");
+    const searchInput = document.getElementById("searchInput");
+    const filterBtns = document.querySelectorAll(".filter-btn");
+
+    async function loadItems() {
+      try {
+        const res = await fetch("data.json?t=" + Date.now());
+        if (!res.ok) throw new Error("data.json not found");
+        allItems = await res.json();
+        renderItems();
+      } catch (err) {
+        gridEl.innerHTML = '<div class="empty">No items found. Add data.json in repository.</div>';
+      }
+    }
+
+    function renderItems() {
+      const filtered = allItems.filter((item) => {
+        const cat = (item.category || "").toUpperCase();
+        const matchesCat = currentCategory === "ALL" || cat === currentCategory;
+        const title = (item.title || "").toLowerCase();
+        const matchesSearch = title.includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        gridEl.innerHTML = '<div class="empty">Matching kichu pawa jayni.</div>';
+        return;
+      }
+
+      gridEl.innerHTML = filtered
+        .map(
+          (item) => `
+          <div class="card" onclick="openStream('${item.streamUrl || ""}')">
+            <img src="${item.poster || "https://via.placeholder.com/300x450?text=No+Poster"}" alt="${item.title || ""}" />
+            <div class="card-body">
+              <div class="card-title">${item.title || "Untitled"}</div>
+              <div class="card-cat">${item.category || "ITEM"}</div>
+            </div>
+          </div>
+        `
+        )
+        .join("");
+    }
+
+    function openStream(url) {
+      if (!url) {
+        alert("Stream link add kora hoyni.");
+        return;
+      }
+      window.open(url, "_blank");
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.trim();
+      renderItems();
+    });
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.dataset.cat;
+        renderItems();
+      });
+    });
+
+    loadItems();
+  </script>
+</body>
+</html>
