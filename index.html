@@ -291,7 +291,6 @@
   </footer>
 
   <script>
-    // এখানে আপনার Movie, Series এবং Live TV চ্যানেলের লিস্ট যোগ করুন
     const SERVER_DATA = [
       {
         type: "LIVE",
@@ -306,6 +305,13 @@
         tag: "LIVE",
         poster: "",
         url: "#sony1-stream-link"
+      },
+      {
+        type: "MOVIE",
+        title: "Rockstar (2011)",
+        tag: "Hindi",
+        poster: "https://upload.wikimedia.org/wikipedia/en/6/68/Rockstar-Movie-Poster.jpg",
+        url: "#rockstar-download-or-watch-link"
       },
       {
         type: "MOVIE",
@@ -337,8 +343,6 @@
       }
     ];
 
-    let currentFilter = "ALL";
-
     window.addEventListener("load", function () {
       const loader = document.getElementById("loader");
       setTimeout(() => {
@@ -349,7 +353,6 @@
     });
 
     function switchTab(type, el) {
-      currentFilter = type;
       document.querySelectorAll(".m-tab, .b-item").forEach(item => item.classList.remove("active"));
       if (el) el.classList.add("active");
 
@@ -386,11 +389,3 @@
   </script>
 </body>
 </html>
-{
-  type: "MOVIE",
-  title: "Rockstar (2011)",
-  tag: "Hindi",
-  poster: "https://upload.wikimedia.org/wikipedia/en/6/68/Rockstar-Movie-Poster.jpg", // এখানে আপনার পছন্দের পোস্টার ছবির লিংক দিন
-  url: "#rockstar-download-or-watch-link" // এখানে আপনার সার্ভার বা ড্রাইভের ভিডিও/ডাউনলোড লিংক দিন
-},
-
