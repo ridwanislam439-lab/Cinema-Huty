@@ -18,7 +18,7 @@
       overflow-x: hidden;
     }
 
-    /* ================= 1. SPLASH SCREEN / LOADER ================= */
+    /* 1. SPLASH SCREEN / LOADER */
     #loader {
       position: fixed;
       inset: 0;
@@ -69,7 +69,7 @@
       50% { opacity: 1; transform: scale(1.15); }
     }
 
-    /* ================= 2. TOP NAVBAR ================= */
+    /* 2. TOP NAVBAR */
     header {
       background-color: #111827;
       border-bottom: 1px solid #1f2937;
@@ -92,79 +92,3 @@
     }
 
     .logo {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 2px;
-    }
-
-    .logo .part1 { color: #f59e0b; }
-    .logo .part2 { color: #ffffff; }
-    .logo .ext { font-size: 11px; color: #9ca3af; margin-left: 2px; }
-
-    .nav-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #1f2937;
-      border: 1px solid #374151;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    /* ================= 3. SIDEBAR MENU ================= */
-    .sidebar-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 2000;
-      display: none;
-    }
-
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100%;
-      background-color: #0b111e;
-      border-right: 1px solid #1e293b;
-      z-index: 2001;
-      padding: 20px 16px;
-      transition: left 0.3s ease;
-      overflow-y: auto;
-    }
-
-    .sidebar.active { left: 0; }
-    .sidebar-overlay.active { display: block; }
-
-    .sidebar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .sidebar-title {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #fff;
-      text-shadow: 0 0 12px rgba(245, 158, 11, 0.7);
-    }
-
-    .close-btn {
-      width: 32px;
-      height: 32px;
-      
