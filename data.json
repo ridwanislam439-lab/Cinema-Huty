@@ -1,0 +1,18 @@
+[
+  {
+    "id": "mov-001",
+    "title": "Sample Movie",
+    "type": "movie",
+    "category": "MOVIE",
+    "poster": "https://example.com/poster.jpg",
+    "streamUrl": "https://example.com/stream"
+  },
+  {
+    "id": "ser-001",
+    "title": "Sample Series",
+    "type": "tv-series",
+    "category": "TV SERIES",
+    "poster": "https://example.com/series.jpg",
+    "streamUrl": "https://example.com/series-stream"
+  }
+]
