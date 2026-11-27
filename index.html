@@ -1,667 +1,111 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cinema Huty</title>
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
     }
 
     body {
-      background-color: #0b0e17;
-      color: #f3f4f6;
-      padding-bottom: 56px;
+      background-color: #0b1320;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
     }
 
-    .topbar {
-      background: #121726;
-      padding: 16px 18px;
+    #loader {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0b1320;
       display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #1f273d;
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      z-index: 9999;
+      transition: opacity 0.4s ease;
     }
 
-    .menu-btn {
-      font-size: 1.35rem;
-      color: #e5e7eb;
-      background: none;
-      border: none;
-      cursor: pointer;
+    .loader-box {
+      text-align: center;
     }
 
     .brand {
-      font-size: 1.2rem;
+      color: #f4b400;
+      font-size: 26px;
       font-weight: 800;
-      letter-spacing: 2px;
-      color: #ffffff;
-      text-shadow: 0 0 12px rgba(255, 71, 87, 0.55);
-    }
-
-    .drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      display: none;
-      z-index: 40;
-    }
-
-    .drawer-backdrop.open {
-      display: block;
-    }
-
-    .side-drawer {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 285px;
-      max-width: 85vw;
-      height: 100vh;
-      background: #101522;
-      border-right: 1px solid #1f2942;
-      padding: 18px 16px;
-      overflow-y: auto;
-      transition: left 0.25s ease;
-      z-index: 50;
-    }
-
-    .side-drawer.open {
-      left: 0;
-    }
-
-    .drawer-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #1d263d;
-    }
-
-    .close-btn {
-      background: #1a2236;
-      color: #e5e7eb;
-      border: 1px solid #2b3754;
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    .open-search-btn {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #384975;
-      background: linear-gradient(90deg, #17223b, #231d3d);
-      color: #e5e7eb;
-      font-weight: 700;
-      font-size: 0.85rem;
-      letter-spacing: 0.8px;
-      cursor: pointer;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .nav-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .nav-item {
-      width: 100%;
-      background: #171d2e;
-      border: 1px solid #232d47;
-      color: #e5e7eb;
-      padding: 14px 16px;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .nav-item:hover,
-    .nav-item.active {
-      border-color: #4f67a8;
-      background: #1d263d;
-    }
-
-    .search-wrap {
-      padding: 14px 18px 8px;
-    }
-
-    .search-box {
-      width: 100%;
-      background: #151b2e;
-      border: 1px solid #26314d;
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    .category-bar {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 8px 18px 4px;
-      scrollbar-width: none;
-    }
-
-    .category-bar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .cat-pill {
-      background: #151b2e;
-      color: #d1d5db;
-      border: 1px solid #26314d;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .cat-pill.active {
-      background: #2563eb;
-      border-color: #3b82f6;
-      color: #ffffff;
-    }
-
-    .player-banner {
-      margin: 12px 18px 0;
-      padding: 14px;
-      background: #131a2e;
-      border: 1px solid #2a3961;
-      border-radius: 12px;
-      display: none;
-    }
-
-    .player-banner.active {
-      display: block;
-    }
-
-    .player-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      gap: 10px;
-    }
-
-    .player-title {
-      font-size: 0.96rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .player-close {
-      background: #1e2947;
-      color: #e5e7eb;
-      border: 1px solid #334575;
-      border-radius: 6px;
-      padding: 4px 9px;
-      font-size: 0.78rem;
-      cursor: pointer;
-    }
-
-    .player-url {
-      font-size: 0.8rem;
-      color: #93c5fd;
-      word-break: break-all;
-      margin-bottom: 10px;
-    }
-
-    .player-link-btn {
-      display: inline-block;
-      background: #ef4444;
-      color: #fff;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .section {
-      padding: 18px 0 6px 18px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      letter-spacing: 1.5px;
       margin-bottom: 14px;
-      padding-right: 18px;
+      text-transform: uppercase; /* সব অক্ষর বড় হাতের দেখানোর জন্য */
     }
 
-    .section-title {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .row-scroll {
+    .dots {
       display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding-right: 18px;
-      scrollbar-width: none;
-    }
-
-    .row-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .movie-card {
-      min-width: 155px;
-      max-width: 155px;
-      background: #131828;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #202942;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .movie-card:hover {
-      border-color: #3b82f6;
-    }
-
-    .poster {
-      position: relative;
-      height: 215px;
-      background: linear-gradient(135deg, #242b45, #141826);
-      display: flex;
-      align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 10px;
-      color: #ff6b81;
-      font-weight: 700;
-      background-size: cover;
-      background-position: center;
+      align-items: center;
+      gap: 8px;
     }
 
-    .live-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: #ef4444;
-      color: #fff;
-      font-weight: 800;
-      font-size: 0.72rem;
-      padding: 3px 7px;
-      border-radius: 5px;
-      letter-spacing: 0.5px;
+    .dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #f4b400;
+      opacity: 0.25;
+      animation: dotPulse 1.2s infinite ease-in-out;
     }
 
-    .rank-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: #f5b700;
-      color: #111;
-      font-weight: 800;
-      font-size: 0.78rem;
-      padding: 3px 7px;
-      border-radius: 5px;
+    .dots span:nth-child(2) {
+      animation-delay: 0.2s;
     }
 
-    .progress-badge {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(15, 23, 42, 0.88);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.75rem;
-      padding: 3px 7px;
-      border-radius: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+    .dots span:nth-child(3) {
+      animation-delay: 0.4s;
     }
 
-    .movie-info {
-      padding: 10px;
-    }
-
-    .movie-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #f9fafb;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 4px;
-    }
-
-    .movie-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: #9ca3af;
+    @keyframes dotPulse {
+      0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
     }
   </style>
 </head>
 <body>
-  <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
-  <aside class="side-drawer" id="sideDrawer">
-    <div class="drawer-header">
+  <div id="loader">
+    <div class="loader-box">
       <div class="brand">CINEMA HUTY</div>
-      <button class="close-btn" id="closeDrawerBtn" aria-label="Close Menu">✕</button>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
-
-    <button class="open-search-btn" id="drawerSearchBtn">? OPEN SEARCH</button>
-
-    <nav class="nav-list">
-      <button class="nav-item active" data-category="ALL"><span>HOME</span></button>
-      <button class="nav-item" data-category="LIVE TV"><span>LIVE TV</span><span>&gt;</span></button>
-      <button class="nav-item" data-category="MOVIE"><span>MOVIE</span><span>&gt;</span></button>
-      <button class="nav-item" data-category="TV SERIES"><span>TV SERIES</span><span>&gt;</span></button>
-      <button class="nav-item" data-category="GAMES"><span>GAMES</span></button>
-      <button class="nav-item" data-category="SOFTWARE"><span>SOFTWARE</span></button>
-      <button class="nav-item" data-category="TUTORIAL"><span>TUTORIAL</span></button>
-    </nav>
-  </aside>
-
-  <header class="topbar">
-    <button class="menu-btn" id="openDrawerBtn" aria-label="Menu">☰</button>
-    <div class="brand">CINEMA HUTY</div>
-    <span style="width: 20px;"></span>
-  </header>
-
-  <div class="search-wrap">
-    <input
-      type="text"
-      id="searchInput"
-      class="search-box"
-      placeholder="Search movie / live tv / series..."
-    />
   </div>
 
-  <div class="category-bar" id="categoryBar">
-    <button class="cat-pill active" data-category="ALL">ALL</button>
-    <button class="cat-pill" data-category="LIVE TV">LIVE TV</button>
-    <button class="cat-pill" data-category="MOVIE">MOVIE</button>
-    <button class="cat-pill" data-category="TV SERIES">TV SERIES</button>
-    <button class="cat-pill" data-category="GAMES">GAMES</button>
-    <button class="cat-pill" data-category="SOFTWARE">SOFTWARE</button>
-    <button class="cat-pill" data-category="TUTORIAL">TUTORIAL</button>
+  <!-- আপনার মূল পেজের কনটেন্ট এখানে থাকবে -->
+  <div id="app">
+    <!-- আপনার সাইটের আগের কোডগুলো এখানে রাখুন -->
   </div>
-
-  <div class="player-banner" id="playerBanner">
-    <div class="player-top">
-      <div class="player-title" id="playerTitle">Selected Item</div>
-      <button class="player-close" id="closePlayerBtn">Close</button>
-    </div>
-    <div class="player-url" id="playerUrl"></div>
-    <a class="player-link-btn" id="playerOpenLink" href="#" target="_blank" rel="noopener noreferrer">Open Stream</a>
-  </div>
-
-  <section class="section">
-    <div class="section-header">
-      <span>📺</span>
-      <h2 class="section-title">Live TV</h2>
-    </div>
-    <div class="row-scroll" id="liveTvList"></div>
-  </section>
-
-  <section class="section">
-    <div class="section-header">
-      <span>🔥</span>
-      <h2 class="section-title">Weekly Top 20 Trending</h2>
-    </div>
-    <div class="row-scroll" id="trendingList">
-      <div class="movie-card" data-title="Operation Shadow" data-category="MOVIE" data-stream="https://example.com/movies/operation-shadow">
-        <div class="poster">
-          <span class="rank-badge">#1</span>
-          <span>POSTER 01</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">Operation Shadow</div>
-          <div class="movie-meta">
-            <span>2026</span>
-            <span>1,431 Hits</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="movie-card" data-title="Midnight Echo" data-category="TV SERIES" data-stream="https://example.com/series/midnight-echo">
-        <div class="poster">
-          <span class="rank-badge">#2</span>
-          <span>POSTER 02</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">Midnight Echo</div>
-          <div class="movie-meta">
-            <span>2025</span>
-            <span>980 Hits</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="movie-card" data-title="Cyber Quest" data-category="GAMES" data-stream="https://example.com/games/cyber-quest">
-        <div class="poster">
-          <span class="rank-badge">#3</span>
-          <span>GAME 01</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">Cyber Quest</div>
-          <div class="movie-meta">
-            <span>2026</span>
-            <span>765 Hits</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-header">
-      <span>▶</span>
-      <h2 class="section-title">Continue Watching</h2>
-    </div>
-    <div class="row-scroll" id="continueList">
-      <div class="movie-card" data-title="The Last Signal" data-category="TV SERIES" data-stream="https://example.com/series/last-signal">
-        <div class="poster">
-          <span class="progress-badge">58%</span>
-          <span>WATCHING 01</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">The Last Signal</div>
-          <div class="movie-meta">
-            <span>Episode 04</span>
-            <span>HD</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="movie-card" data-title="Pro Media Pack" data-category="SOFTWARE" data-stream="https://example.com/software/media-pack">
-        <div class="poster">
-          <span class="progress-badge">32%</span>
-          <span>SOFTWARE 01</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">Pro Media Pack</div>
-          <div class="movie-meta">
-            <span>v2.4</span>
-            <span>1080p</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="movie-card" data-title="Web Setup Guide" data-category="TUTORIAL" data-stream="https://example.com/tutorial/web-setup">
-        <div class="poster">
-          <span class="progress-badge">80%</span>
-          <span>TUTORIAL 01</span>
-        </div>
-        <div class="movie-info">
-          <div class="movie-title">Web Setup Guide</div>
-          <div class="movie-meta">
-            <span>Part 02</span>
-            <span>HD</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <script>
-    // বাইরের চ্যানেলগুলোর নাম, দেশ/ক্যাটাগরি ও স্ট্রিম লিংক এখানে বসিয়ে দিন
-    const liveChannelsData = [
-      { name: "World News HD", region: "Global", quality: "HD", stream: "https://example.com/live/world-news.m3u8" },
-      { name: "Action Cinema 24/7", region: "USA", quality: "1080p", stream: "https://example.com/live/action-cinema.m3u8" },
-      { name: "Sports Arena Live", region: "UK", quality: "HD", stream: "https://example.com/live/sports-arena.m3u8" },
-      { name: "Kids Fun TV", region: "Global", quality: "HD", stream: "https://example.com/live/kids-fun.m3u8" }
-    ];
-
-    const liveTvList = document.getElementById("liveTvList");
-    const openDrawerBtn = document.getElementById("openDrawerBtn");
-    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
-    const sideDrawer = document.getElementById("sideDrawer");
-    const drawerBackdrop = document.getElementById("drawerBackdrop");
-    const drawerSearchBtn = document.getElementById("drawerSearchBtn");
-    const searchInput = document.getElementById("searchInput");
-    const navItems = document.querySelectorAll(".nav-item");
-    const catPills = document.querySelectorAll(".cat-pill");
-    const playerBanner = document.getElementById("playerBanner");
-    const playerTitle = document.getElementById("playerTitle");
-    const playerUrl = document.getElementById("playerUrl");
-    const playerOpenLink = document.getElementById("playerOpenLink");
-    const closePlayerBtn = document.getElementById("closePlayerBtn");
-
-    let selectedCategory = "ALL";
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    function bindCardClick(card) {
-      card.addEventListener("click", () => {
-        const title = card.getAttribute("data-title");
-        const stream = card.getAttribute("data-stream") || "#";
-        playerTitle.textContent = title;
-        playerUrl.textContent = stream;
-        playerOpenLink.href = stream;
-        playerBanner.classList.add("active");
-        playerBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      });
-    }
-
-    function renderLiveChannels() {
-      liveTvList.innerHTML = "";
-      liveChannelsData.forEach((ch, index) => {
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        card.setAttribute("data-title", ch.name);
-        card.setAttribute("data-category", "LIVE TV");
-        card.setAttribute("data-stream", ch.stream);
-        card.innerHTML = `
-          <div class="poster">
-            <span class="live-badge">LIVE</span>
-            <span>TV ${String(index + 1).padStart(2, "0")}</span>
-          </div>
-          <div class="movie-info">
-            <div class="movie-title">${escapeHtml(ch.name)}</div>
-            <div class="movie-meta">
-              <span>${escapeHtml(ch.region || "Live")}</span>
-              <span>${escapeHtml(ch.quality || "HD")}</span>
-            </div>
-          </div>
-        `;
-        bindCardClick(card);
-        liveTvList.appendChild(card);
-      });
-    }
-
-    function openDrawer() {
-      sideDrawer.classList.add("open");
-      drawerBackdrop.classList.add("open");
-    }
-
-    function closeDrawer() {
-      sideDrawer.classList.remove("open");
-      drawerBackdrop.classList.remove("open");
-    }
-
-    function syncCategoryButtons(category) {
-      selectedCategory = category;
-      navItems.forEach((btn) => {
-        btn.classList.toggle("active", btn.getAttribute("data-category") === category);
-      });
-      catPills.forEach((pill) => {
-        pill.classList.toggle("active", pill.getAttribute("data-category") === category);
-      });
-    }
-
-    function applyFilters() {
-      const q = searchInput.value.toLowerCase().trim();
-      const cards = document.querySelectorAll(".movie-card");
-      cards.forEach((card) => {
-        const title = card.getAttribute("data-title").toLowerCase();
-        const category = card.getAttribute("data-category");
-        const matchCategory = selectedCategory === "ALL" || category === selectedCategory;
-        const matchSearch = title.includes(q);
-        card.style.display = matchCategory && matchSearch ? "block" : "none";
-      });
-    }
-
-    renderLiveChannels();
-    document.querySelectorAll(".movie-card").forEach(bindCardClick);
-
-    openDrawerBtn.addEventListener("click", openDrawer);
-    closeDrawerBtn.addEventListener("click", closeDrawer);
-    drawerBackdrop.addEventListener("click", closeDrawer);
-
-    drawerSearchBtn.addEventListener("click", () => {
-      closeDrawer();
-      searchInput.focus();
-      searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.addEventListener("load", function () {
+      const loader = document.getElementById("loader");
+      loader.style.opacity = "0";
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 400);
     });
-
-    navItems.forEach((item) => {
-      item.addEventListener("click", () => {
-        syncCategoryButtons(item.getAttribute("data-category"));
-        applyFilters();
-        closeDrawer();
-      });
-    });
-
-    catPills.forEach((pill) => {
-      pill.addEventListener("click", () => {
-        syncCategoryButtons(pill.getAttribute("data-category"));
-        applyFilters();
-      });
-    });
-
-    closePlayerBtn.addEventListener("click", () => {
-      playerBanner.classList.remove("active");
-    });
-
-    searchInput.addEventListener("input", applyFilters);
   </script>
+
 </body>
 </html>
